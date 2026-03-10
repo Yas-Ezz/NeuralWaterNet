@@ -16,10 +16,11 @@ DB_NAME = os.getenv("POSTGRES_DB", "waternet_db")
 DB_USER = os.getenv("POSTGRES_USER", "admin")
 DB_PASS = os.getenv("POSTGRES_PASSWORD", "password123")
 
-# Paths (Mapped via Docker volumes)
-MODEL_PATH = "notebooks/models/hybrid/"
-SCALER_PATH = "notebooks/data/artifacts/scaler.gz"
-RL_MODEL_PATH = "notebooks/models/rl/ppo_waternet" # The new agent we just trained!
+# --- THE FIX: Updated Paths for Production Deployment ---
+# These paths match the root "models/" folder mapped inside the Docker container
+MODEL_PATH = "models/"
+SCALER_PATH = "models/scaler.pkl" # Updated based on standard save format
+RL_MODEL_PATH = "models/ppo_waternet" 
 
 # Important: This order must match the scaler training!
 FEATURES = ['flow_l_min', 'turbidity_ntu', 'tank_level', 'ph', 'pressure']

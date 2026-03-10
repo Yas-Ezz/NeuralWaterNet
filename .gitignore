@@ -14,4 +14,5 @@ venv/
 Thumbs.db
 
 # Data & Large Models (Keep the final model, ignore training checkpoints if any)
-*.log
+*.logNeuralWaterNetvenv/ 
+data/ 

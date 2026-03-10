@@ -19,7 +19,7 @@ DB_PASS = os.getenv("POSTGRES_PASSWORD", "password123")
 # --- THE FIX: Updated Paths for Production Deployment ---
 # These paths match the root "models/" folder mapped inside the Docker container
 MODEL_PATH = "models/"
-SCALER_PATH = "models/scaler.pkl" # Updated based on standard save format
+SCALER_PATH = "models/scaler.gz" # Updated based on standard save format
 RL_MODEL_PATH = "models/ppo_waternet" 
 
 # Important: This order must match the scaler training!

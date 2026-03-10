@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Service 1: The AI Application (Data Generator)
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: neural_waternet_app
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - swe_network
+
+  # Service 2: The Database (TimescaleDB)
+  db:
+    image: timescale/timescaledb:latest-pg14
+    container_name: neural_waternet_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: waternet_db
+    ports:
+      - "5438:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - swe_network
+
+  # Service 3: The Dashboard (Grafana) - NEW!
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: neural_waternet_grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Default password
+    depends_on:
+      - db
+    networks:
+      - swe_network
+
+networks:
+  swe_network:
+    driver: bridge

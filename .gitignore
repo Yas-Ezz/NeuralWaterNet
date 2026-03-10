@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints
+
+# Docker & OS
+.docker/
+.DS_Store
+Thumbs.db
+
+# Data & Large Models (Keep the final model, ignore training checkpoints if any)
+*.log

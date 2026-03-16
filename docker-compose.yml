@@ -32,6 +32,7 @@ services:
       - swe_network
 
   # Service 3: The Dashboard (Grafana) - NEW!
+  # Service 3: The Dashboard (Grafana)
   grafana:
     image: grafana/grafana-oss:latest
     container_name: neural_waternet_grafana
@@ -43,7 +44,9 @@ services:
       - db
     networks:
       - swe_network
-
+    volumes:  # <--- THIS IS THE MAGIC BRIDGE
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards
 networks:
   swe_network:
     driver: bridge

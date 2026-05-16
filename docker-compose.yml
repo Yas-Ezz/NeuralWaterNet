@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Service 1: The AI Application (Data Generator)
+  # Service 1: The AI Application (Data Generator & FastAPI)
   app:
     build:
       context: .
@@ -13,6 +13,8 @@ services:
       - .env
     depends_on:
       - db
+      - mosquitto
+      - redis
     networks:
       - swe_network
 
@@ -31,7 +33,6 @@ services:
     networks:
       - swe_network
 
-  # Service 3: The Dashboard (Grafana) - NEW!
   # Service 3: The Dashboard (Grafana)
   grafana:
     image: grafana/grafana-oss:latest
@@ -47,6 +48,30 @@ services:
     volumes:  # <--- THIS IS THE MAGIC BRIDGE
       - ./docker/grafana/provisioning:/etc/grafana/provisioning
       - ./docker/grafana/dashboards:/var/lib/grafana/dashboards
+
+  # Service 4: Message Broker (MQTT) - NEW!
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: neural_waternet_mqtt
+    ports:
+      - "1883:1883" # Standard MQTT port
+      - "9001:9001" # WebSockets over MQTT
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - swe_network
+
+  # Service 5: Caching & Sessions (Redis) - NEW!
+  redis:
+    image: redis:alpine
+    container_name: neural_waternet_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - swe_network
+
 networks:
   swe_network:
     driver: bridge

@@ -1,0 +1,5 @@
+{
+  "name": "SmartWater Ecosystem (SWE)",
+  "description": "Application mobile de contrôle et suivi personnalisé de la consommation d'eau.",
+  "requestFramePermissions": []
+}

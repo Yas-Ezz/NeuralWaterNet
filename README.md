@@ -1,172 +1,133 @@
-# Neural WaterNet: Autonomous Edge AI for Water Treatment
+# **🌊 Neural WaterNet: Edge AI Architecture for Autonomous Water Treatment**
 
-Neural WaterNet is an end-to-end industrial IoT platform designed for autonomous water quality monitoring and tank management. It utilizes a hybrid AI approach combining Deep Learning for anomaly detection and Reinforcement Learning for real-time hardware control.
+Neural WaterNet is an enterprise-grade IoT and Artificial Intelligence platform designed to monitor, analyze, and control distributed water treatment facilities in real time. By deploying Machine Learning models (Isolation Forests and LSTMs) directly to Edge devices, the system eliminates cloud-latency dependencies, ensuring deterministic, sub-150ms autonomous reactions to water anomalies such as pH, turbidity, and flow irregularities.
 
----
+## **✨ Key Features**
 
-# 🚀 System Architecture
+* **🌍 Enterprise Fleet Management (V2):** Interactive dark-mode CartoDB mapping system tracking live telemetry from multiple nodes across Morocco.  
+* **⚡ Sub-500ms Streaming:** End-to-end WebSocket architecture bridging the Edge Mosquitto MQTT broker to the FastAPI backend, pushing live data instantly to React clients.  
+* **🔐 Role-Based Access Control (RBAC):** Secure dual-portal architecture where SuperAdmins access the global fleet map and Local Operators are restricted to isolated node controls.  
+* **🤖 Edge AI Hardware Simulation:** Python-based Edge agents simulate industrial sensors and execute local anomaly thresholds before broadcasting payloads.  
+* **📊 Glassmorphic UI/UX:** High-performance animated interface using Framer Motion, Tailwind CSS, Recharts, and automated client-side PDF reporting.
 
-The system is fully containerized using **Docker**, optimized for edge devices like the **Raspberry Pi 4**, and includes the following components:
+## **📂 Repository Structure (Monorepo)**
 
-- **IoT Simulation:** Realistic sensor data generation via Python.
-- **Time-Series Database:** TimescaleDB for high-ingestion big data storage.
-- **Monitoring:** Real-time Grafana dashboards for visual surveillance.
-- **Deep Learning Anomaly Detection:** An Autoencoder and Isolation Forest monitoring flow patterns for leaks and surges.
-- **Reinforcement Learning Controller:** A PPO (Proximal Policy Optimization) agent that autonomously manages a diversion valve and extraction pump.
+NeuralWaterNet/  
+├── backend/                  \# API, AI Models, and Infrastructure  
+│   ├── models/               \# Pre-trained ML & RL models (.keras, .pkl, .zip)  
+│   ├── notebooks/            \# Jupyter notebooks for data pipeline & training  
+│   ├── src/                  \# FastAPI server and Edge AI MQTT simulators  
+│   ├── mosquitto/            \# MQTT broker configuration  
+│   └── docker-compose.yml    \# TimescaleDB and Redis infrastructure  
+│  
+└── frontend/                 \# Client and Admin React application  
+    ├── src/  
+    │   ├── components/       \# UI components (Dashboard, Map, Tracking)  
+    │   ├── store/            \# Zustand state management  
+    │   └── firebase.ts       \# RBAC and authentication configuration  
+    └── package.json
 
----
+## **🚀 Local Development Setup**
 
-# 📂 Repository Structure
+To run the full ecosystem locally, open four separate terminal windows.
 
-```
-/models
-    ppo_waternet.zip        # Pre-trained PPO RL agent
-    autoencoder.keras       # Autoencoder weights
-    isolation_forest.pkl    # Isolation Forest model
-    scaler.pkl              # Data scaler
+### **1\. Start the Infrastructure (Database & Message Broker)**
 
-/src
-    ai_service.py           # Main AI inference service
-    sensor_mock.py          # Sensor data simulation
-    rl_env.py               # Reinforcement learning environment
+Ensure Docker Desktop is running, then deploy TimescaleDB and Mosquitto.
 
-/notebooks
-    Data extraction
-    Preprocessing
-    Model training pipelines
+cd backend  
+docker-compose up \-d
 
-/docker
-    Dockerfiles for building the application container
-```
+### **2\. Start the FastAPI Middleware**
 
----
+Activate your virtual environment and start the API server.
 
-# ⚙️ How to Run the Project Locally
+cd backend
 
-## 1️⃣ Prerequisites
+\# Windows  
+venv\\Scripts\\activate
 
-Make sure you have the following installed:
+\# macOS/Linux  
+source venv/bin/activate
 
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+pip install \-r requirements.txt  
+uvicorn src.api:app \--reload \--port 8000
 
----
+Wait until you see the log message: \[BACKEND MQTT\] Connected\!
 
-## 2️⃣ Clone and Boot the Infrastructure
+### **3\. Start the Edge AI Simulator**
 
-Open your terminal and run:
+Launch the Raspberry Pi mock agent to begin publishing sensor telemetry.
 
-```bash
-git clone https://github.com/Yas-Ezz/NeuralWaterNet.git
-cd NeuralWaterNet
-docker-compose up -d
-```
+cd backend
 
-This will start:
+\# Activate virtual environment first  
+python src/simulation/sensor\_mqtt\_agent.py
 
-- TimescaleDB database
-- Grafana dashboard
-- AI application container
+### **4\. Launch the React Frontend**
 
----
+Start the web interface.
 
-## 3️⃣ Start the IoT Sensor Simulation
+cd frontend  
+npm install  
+npm run dev
 
-The AI system requires sensor data to operate. Open a **new terminal window** and run:
+Navigate to: http://localhost:3000
 
-```bash
-docker exec -it neural_waternet_app python src/simulation/sensor_mock.py
-```
+## **🏗️ Technology Stack**
 
-This script generates **realistic water flow sensor data**.
+**Frontend**
 
----
+* React 18  
+* Vite  
+* Tailwind CSS  
+* Framer Motion  
+* Recharts  
+* Zustand  
+* Firebase Authentication
 
-## 4️⃣ Start the AI Brain
+**Backend**
 
-Open **another terminal window** and launch the AI inference engine:
+* FastAPI  
+* WebSockets  
+* MQTT (Mosquitto)  
+* TimescaleDB  
+* Redis
 
-```bash
-docker exec -it neural_waternet_app python src/ai_service.py
-```
+**AI & Data Science**
 
-This script will:
+* Python  
+* Scikit-learn  
+* TensorFlow/Keras  
+* Isolation Forest  
+* LSTM Networks  
+* Reinforcement Learning
 
-- Load the **Autoencoder model**
-- Load the **PPO Reinforcement Learning agent**
-- Read **live sensor data**
-- Output **control commands** for the pump and valve system
+**Infrastructure**
 
----
+* Docker Compose  
+* Edge AI Simulators  
+* Raspberry Pi Deployment Ready
 
-## 5️⃣ View the Dashboard
+## **🎯 Performance Targets**
 
-Open your browser and navigate to:
+* **Autonomous Response Time:** \< 150ms  
+* **Frontend Streaming Latency:** \< 500ms  
+* **Edge Processing:** Local inference without cloud dependency  
+* **Scalability:** Multi-node monitoring across distributed treatment facilities
 
-```
-http://localhost:3001
-```
+## **📌 Use Cases**
 
-Default login:
+* Smart municipal water treatment plants  
+* Industrial wastewater management  
+* Remote water infrastructure monitoring  
+* Real-time anomaly detection and automated corrective actions  
+* Predictive maintenance of pumps and sensors
 
-```
-Username: admin
-Password: admin
-```
+## **👨‍💻 Author**
 
-From Grafana, connect to the **PostgreSQL / TimescaleDB container** to visualize:
+**Ilyas Ezzahrioui** B.S. in Computer Science, specializing in Big Data Analytics
 
-- Water tank levels
-- Flow rates
-- Detected anomalies
-- System behavior in real time
+Al Akhawayn University
 
----
-
-# 🛠️ Edge Deployment (Raspberry Pi Notes)
-
-Currently, the project uses:
-
-```
-src/simulation/sensor_mock.py
-```
-
-to generate **simulated sensor data** for testing on a standard computer.
-
-To deploy on real hardware:
-
-### Replace Sensor Simulation
-
-Replace the mock script with a **GPIO sensor interface** using libraries such as:
-
-- `RPi.GPIO`
-- `spidev`
-
-This will allow the system to read **real water sensors** connected to the Raspberry Pi.
-
-### Keep the Same AI Architecture
-
-The following components remain unchanged:
-
-- Docker architecture
-- `/models` directory
-- AI inference service
-
-This ensures that the AI logic **ports seamlessly to the ARM architecture of the Raspberry Pi**.
-
----
-
-# 📊 Project Highlights
-
-- Edge AI system for industrial water monitoring
-- Hybrid **Deep Learning + Reinforcement Learning**
-- Real-time **IoT data streaming**
-- **Grafana monitoring dashboards**
-- **Dockerized architecture for easy deployment**
-- Compatible with **Raspberry Pi edge hardware**
-
----
-
-# 📜 License
-
-This project is open-source and available under the MIT License.
+Edge AI Engineer @ VIC DeepTech
